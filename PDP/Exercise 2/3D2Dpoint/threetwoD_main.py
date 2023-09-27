@@ -3,6 +3,12 @@ The Point class should demonstrate the basic functions using 2D and 3D points.
 The class should also have the special functions such as reset, distance, conversion
 from 3D to 2D etc.
 Create separate packages for 2D and 3D points.
+
+This is "main" module of 3d and 2d points
+
+Author : Harishraj S
+Date : 13-09-2023
+
 '''
 
 # Import the classes from their respective modules
@@ -16,21 +22,21 @@ point_3d = Point3D(1, 2, 3)
 # Test cases for Point2D
 print("Point2D:")
 print("Coordinates:", point_2d.co_ord())
-print("Distance from origin:", point_2d.distance())  
+print("Distance from origin:", point_2d.distance())
 point_3d_converted = point_2d.to2D()
-print("Converted to 3D:", point_3d_converted.co_ord()) 
+print("Converted to 3D:", point_3d_converted.co_ord())
 point_2d.reset()
-print("After reset - Coordinates:", point_2d.co_ord())  
+print("After reset - Coordinates:", point_2d.co_ord())
 point_3d_converted = point_2d.to2D()
-print("Converted to 3D:", point_3d_converted.co_ord())  
+print("Converted to 3D:", point_3d_converted.co_ord())
 
 # Test cases for Point3D
 print("\nPoint3D:")
 print("Coordinates:", point_3d.co_ord())
-print("Distance from origin:", point_3d.distance()) 
+print("Distance from origin:", point_3d.distance())
 point_2d_converted = point_3d.to2D()
-print("Converted to 2D:", point_2d_converted.co_ord())  
+print("Converted to 2D:", point_2d_converted.co_ord())
 point_3d.reset()
-print("After reset - Coordinates:", point_3d.co_ord())  
+print("After reset - Coordinates:", point_3d.co_ord())
 point_2d_converted = point_3d.to2D()
-print("Converted to 2D:", point_2d_converted.co_ord())  
+print("Converted to 2D:", point_2d_converted.co_ord())

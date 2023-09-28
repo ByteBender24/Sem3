@@ -198,15 +198,30 @@ MODIFY Recording_date DATE NOT NULL;
 REM| 14) It was decided to include the genre NAT for nature songs.
 
 ALTER TABLE Song
-DROP CONSTRAINT Check_Genre_song ;
+DROP CONSTRAINT Check_Song_genre ;
 ALTER TABLE Song
-ADD CONSTRAINT Check_Genre_song CHECK (Genre IN ('PHI', 'REL', 'LOV', 'DEV', 'PAT', 'NAT'));
+ADD CONSTRAINT Check_Song_genre CHECK (Song_genre IN ('PHI', 'REL', 'LOV', 'DEV', 'PAT', 'NAT'));
 
 
 REM| 15) Due to typo-error, there may be a possibility of false information.
 -- Hence while deleting the song information, make sure that all the
 -- corresponding information are also deleted.
 
--- Drop the existing foreign key constraints
--- Re-add the foreign key constraints with ON DELETE CASCADE
 
+-- Drop the existing foreign key constraints
+ALTER TABLE SungBy DROP CONSTRAINT FK_Album_ID_SungBy;
+ALTER TABLE SungBy DROP CONSTRAINT FK_Artist_ID;
+ALTER TABLE SungBy DROP CONSTRAINT FK_Track_no;
+
+-- Re-add the foreign key constraints with ON DELETE CASCADE
+ALTER TABLE SungBy
+ADD CONSTRAINT FK_Album_ID_SungBy FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID) ON DELETE CASCADE;
+
+ALTER TABLE SungBy
+ADD CONSTRAINT FK_Artist_ID FOREIGN KEY (Artist_ID) REFERENCES Artist(Artist_ID) ON DELETE CASCADE;
+
+ALTER TABLE SungBy
+ADD CONSTRAINT FK_Track_no FOREIGN KEY (Track_no, Album_ID) REFERENCES Song(Track_no, Album_ID) ON DELETE CASCADE;
+
+
+REM|---------------------------------------SCRIPT FILE END--------------------------------------------------

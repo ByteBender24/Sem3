@@ -4,6 +4,15 @@ Age category. Check the age using the packages and accept only the children of a
 registration is valid for 6 month. When person shows the registration details, check and display,
 whether its valid today, with respect to age and registration Date.
 
+Modification 1 : Created code and modules for package (Date)
+Modification 2 : Ran Driver code (debugging)
+Modification 3 : Wrote Documentation
+Modification 4 : Formatted all files using Prettier
+
+Future Scope : 
+ -- Can add more functionalities to include time registered, and alter the registered time or date when entered wrong.
+ -- Should be able to calculate age (including leap years and all) - without using dateutil package 
+
 Author : Harishraj S
 Date : 27-09-2023
 '''
@@ -72,7 +81,8 @@ class Valid_students:
     def show_students(self):
         self.remove_expired()
         return self.list
-    
+
+
 def get_details():
     name = input("Enter name :")
     dob = input("Enter dob as dd.mm.yyyy format:")
@@ -88,6 +98,7 @@ def get_details():
 
     return Student(name, dob, contact, date_registered, achievements)
 
+
 def main():
     students_valid = Valid_students()
 
@@ -98,7 +109,7 @@ def main():
         try:
             student = get_details()
             if student.is_valid():
-                print (student.is_valid())
+                print(student.is_valid())
                 students_valid.add_student(student)
                 print("Student registration successful!")
             else:
@@ -106,21 +117,20 @@ def main():
         except DateError as e:
             print(f"Error: {e}")
 
-        print (students_valid)
+        print(students_valid)
 
         choice = input("Do you want to register another student? (y/n): ")
         if choice.lower() != 'y':
             break
-    
-    
 
     # Remove expired registrations
     students_valid.remove_expired()
 
     print("\nValid Registrations:")
     for student in students_valid.show_students():
-        print(f"Name: {student.name}, DOB: {student.dob}, Contact: {student.contact}")
+        print(
+            f"Name: {student.name}, DOB: {student.dob}, Contact: {student.contact}")
+
 
 if __name__ == "__main__":
     main()
-

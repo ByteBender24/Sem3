@@ -15,3 +15,180 @@ functions other than __init__.
 Author : Harishraj S
 Date : 04-10-2023
 '''
+
+class Course:
+
+    def __init__(self, course_code, course_name, credit_hours):
+        """
+        Initialize a Course object.
+
+        Args:
+        course_code (str): The code of the course.
+        course_name (str): The name of the course.
+        credit_hours (int): The number of credit hours for the course.
+        """
+        self.course_code = course_code
+        self.course_name = course_name
+        self.credit_hours = credit_hours
+
+    def course_info(self):
+        """
+        Get information about the course.
+
+        Returns:
+        str: A formatted string containing course information.
+        """
+        return f"course_code: {self.course_code}\ncourse_name: {self.course_name}\ncredit_hours: {self.credit_hours}"
+
+
+class LabCourse(Course):
+
+    def __init__(self, course_code, course_name, credit_hours, *args, **kwargs):
+        """
+        Initialize a LabCourse object.
+
+        Args:
+        course_code (str): The code of the course.
+        course_name (str): The name of the course.
+        credit_hours (int): The number of credit hours for the course.
+        *args: (lab_location) Additional positional arguments.
+        **kwargs: Additional keyword arguments.
+        """
+        super().__init__(course_code, course_name, credit_hours)
+        self.lab_location = args
+        self.other_info = kwargs
+
+    def course_info(self):
+        """
+        Get information about the lab course.
+
+        Returns:
+        str: A formatted string containing lab course information.
+        """
+        course_info = super().course_info()
+        if self.lab_location != ():
+            course_info += "\nLab Locations:"
+            for labs in self.lab_location:
+                if self.lab_location.index(labs) == len(self.lab_location)-1:
+                    course_info += f"{labs}"
+                    break
+                course_info += f"{labs},"
+        if self.other_info != {} and isinstance(self.other_info, dict):
+            for info_key, info_value in self.other_info.items():
+                course_info += f"\n{info_key}: {info_value}"
+        return course_info
+
+
+class ElectiveCourse(Course):
+
+    def __init__(self, course_code, course_name, credit_hours, *args, **kwargs):
+        """
+        Initialize an ElectiveCourse object.
+
+        Args:
+        course_code (str): The code of the course.
+        course_name (str): The name of the course.
+        credit_hours (int): The number of credit hours for the course.
+        *args: (available_terms) Additional positional arguments.
+        **kwargs: Additional keyword arguments.
+        """
+        super().__init__(course_code, course_name, credit_hours)
+        self.available_terms = args
+        self.other_info = kwargs
+
+    def course_info(self):
+        """
+        Get information about the elective course.
+
+        Returns:
+        str: A formatted string containing elective course information.
+        """
+        course_info = super().course_info()
+        if self.available_terms != ():
+            course_info += "\nAvailable Terms:"
+            for term in self.available_terms:
+                if self.available_terms.index(term) == len(self.available_terms)-1:
+                    course_info += f"{term}"
+                    break
+                course_info += f"{term},"
+        if self.other_info != {} and isinstance(self.other_info, dict):
+            for info_key, info_value in self.other_info.items():
+                course_info += f"\n{info_key}: {info_value}"
+        return course_info
+
+
+class CoreCourse(Course):
+
+    def __init__(self, course_code, course_name, credit_hours, *args, **kwargs):
+        """
+        Initialize a CoreCourse object.
+
+        Args:
+        course_code (str): The code of the course.
+        course_name (str): The name of the course.
+        credit_hours (int): The number of credit hours for the course.
+        *args: (required_prerequisites) Additional positional arguments.
+        **kwargs: Additional keyword arguments.
+        """
+        super().__init__(course_code, course_name, credit_hours)
+        self.required_prerequisites = args
+        self.other_info = kwargs
+
+    def course_info(self):
+        """
+        Get information about the core course.
+
+        Returns:
+        str: A formatted string containing core course information.
+        """
+        course_info = super().course_info()
+        if self.required_prerequisites != ():
+            course_info += "\nRequired Prerequisites:"
+            for prerequisite in self.required_prerequisites:
+                if self.required_prerequisites.index(prerequisite) == len(self.required_prerequisites)-1:
+                    course_info += f"{prerequisite}"
+                    break
+                course_info += f"{prerequisite},"
+        if self.other_info != {} and isinstance(self.other_info, dict):
+            for info_key, info_value in self.other_info.items():
+                course_info += f"\n{info_key}: {info_value}"
+        return course_info
+
+class Student:
+
+    def __init__(self, name, dob):
+        self.name = name
+        self.dob = dob
+
+    def __str__(self):
+        return f"{self.name} - {self.dob}"
+
+class Core_cum_Elective(CoreCourse, ElectiveCourse):
+
+    def __init__(self, course_code, course_name, credit_hours,**kwargs):
+        super().__init__(course_code, course_name, credit_hours, **kwargs)
+        self.required_prerequisites = kwargs.get('required_prerequisites')
+        self.available_terms = kwargs.get('available_terms')
+        self.other_info = kwargs.get('other_info')
+
+    def course_info(self):
+        if self.available_terms is not None:
+            if isinstance(self.available_terms, str):
+                return super().course_info() + f"\navailable_terms : {self.available_terms}"
+            elif isinstance(self.available_terms, list) and self.available_terms != []:
+                return super().course_info() 
+        return super().course_info
+    
+if __name__ == "__main__":
+
+    # elective1 = ElectiveCourse(
+    #     'E101', "TechE", 68, 'summer', 'fall', 'winter', incharge="M&M")
+    # elective2 = ElectiveCourse('E102', 'WallE', 69, 'winter', 'spring')
+    # elective3 = ElectiveCourse('E103', 'BallsE', 60, term="compulsory")
+
+    # print(elective1.course_info())
+    # print(elective2.course_info())
+    # print(elective3.course_info())
+
+    Core_cum_Elective1 = Core_cum_Elective("CCE1", "TEE", 79, required_prerequisites = ["PDP", "Python"], available_terms = ["Summer", "Winter"], other_info = {"nawa":"name"})
+    print (Core_cum_Elective1.course_info())

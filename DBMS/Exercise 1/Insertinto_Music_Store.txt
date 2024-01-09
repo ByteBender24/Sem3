@@ -7,9 +7,8 @@ REM ------------------INSERT INTO VALUES----------------
 
 -- Inserting data into the Musician table
 INSERT INTO Musician (Musician_ID, Name, Birthplace)
-VALUES (1, 'John Doe', 'New York'); -- Inserting a musician
+VALUES (1, 'John Doe', 'New York'); 
 
--- Inserting data into the Studio table
 INSERT INTO Studio (Studio_name, Address, Phone)
 VALUES ('Music Studio A', '123 Main St', 1234567890); -- Inserting a studio
 

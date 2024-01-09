@@ -14,6 +14,8 @@ REM HR.EMPLOYEES has a self referencing foreign key to this table.
 
 Prompt ******  Creating EMPLOYEES table ....
 
+DROP TABLE EMPLOYEES CASCADE CONSTRAINTS;
+
 CREATE TABLE employees
     ( employee_id    NUMBER(6)
     , first_name     VARCHAR2(20)

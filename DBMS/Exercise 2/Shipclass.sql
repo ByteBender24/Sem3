@@ -1,5 +1,5 @@
 SET ECHO ON;
-
+REM| Shipclass Table 
 REM| Question 1
 
 REM| Author : Harishraj S
@@ -12,7 +12,7 @@ REM| the displacement (weight, in tons).
 
 REM| DROPPING Tables
 
-DROP TABLE Shipclass;
+DROP TABLE Shipclass CASCADE CONSTRAINTS;
 
 REM| CREATING Tables;
 

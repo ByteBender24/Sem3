@@ -1,3 +1,5 @@
+SET ECHO ON
+
 REM ***** MUSIC STORE *****
 REM ------------------------------------
 REM Author: Harishraj S
@@ -32,42 +34,36 @@ DROP CONSTRAINT FK_Artist_ID;
 ALTER TABLE Artist
 DROP CONSTRAINT FK_Album_ID;
 
-DROP TABLE Musician;
-DROP TABLE Album;
-DROP TABLE Song;
-DROP TABLE Artist;
-DROP TABLE SungBy;
-DROP TABLE Studio;
+DROP TABLE Musician CASCADE CONSTRAINTS;
+DROP TABLE Album CASCADE CONSTRAINTS;
+DROP TABLE Song CASCADE CONSTRAINTS;
+DROP TABLE Artist CASCADE CONSTRAINTS;
+DROP TABLE SungBy CASCADE CONSTRAINTS;
+DROP TABLE Studio CASCADE CONSTRAINTS;
 
 REM -------------CREATING TABLES--------------
 
-SET ECHO ON
-
+-- Create tables
 CREATE TABLE Musician (
-	Musician_ID int,
-	Name varchar(255),
-	Birthplace varchar(255),
-	CONSTRAINT PK_Musician PRIMARY KEY (Musician_ID)
+    Musician_ID int,
+    Name varchar(255),
+    Birthplace varchar(255)
 );
 
 CREATE TABLE Studio (
-	Studio_name varchar(255),
-	Address varchar(255),
-	Phone int,
-	CONSTRAINT PK_Studio PRIMARY KEY (Studio_name)
+    Studio_name varchar(255),
+    Address varchar(255),
+    Phone int
 );
 
 CREATE TABLE Album (
-	Album_name varchar(255),
-	Album_ID int,
-	Year_of_release int,
-	No_of_tracks int,
-	Studio_recorded varchar(255),
-	Album_genre varchar(255),
-	Musicians int,
-	CONSTRAINT PK_Album PRIMARY KEY (Album_ID),
-	CONSTRAINT FK_Musicians FOREIGN KEY (Musicians) REFERENCES Musician(Musician_ID),
-	CONSTRAINT FK_Studio FOREIGN KEY (Studio_recorded) REFERENCES Studio(Studio_name)
+    Album_name varchar(255),
+    Album_ID int,
+    Year_of_release int,
+    No_of_tracks int,
+    Studio_recorded varchar(255),
+    Album_genre varchar(255),
+    Musicians int
 );
 
 CREATE TABLE Song (
@@ -75,42 +71,63 @@ CREATE TABLE Song (
     Track_no int,
     Song_name varchar(255),
     Song_length int,
-    Song_genre varchar(255),
-    CONSTRAINT PK_Song PRIMARY KEY (Album_ID, Track_no),
-    CONSTRAINT FK_Album_ID_Song FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID)
+    Song_genre varchar(255)
 );
 
 CREATE TABLE Artist (
-	Artist_ID int,
-	Artist_name varchar(255),
-	Album_ID int,	-- Created this query for 5)
-	CONSTRAINT PK_Artist PRIMARY KEY (Artist_ID),
-	CONSTRAINT FK_Album_ID FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID)
+    Artist_ID int,
+    Artist_name varchar(255),
+    Album_ID int
 );
-
---CREATE TABLE SungBy (
---	Album_ID int,
---	Artist_ID int,
---	Track_no int,
---	Recording_date DATE,
---	CONSTRAINT PK_SungBy PRIMARY KEY (Album_ID, Artist_ID, Track_no),
---	CONSTRAINT FK_Album_ID_SungBy FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID),
---	CONSTRAINT FK_Artist_ID FOREIGN KEY (Artist_ID) REFERENCES Artist(Artist_ID),
---	CONSTRAINT FK_Track_no FOREIGN KEY (Track_no) REFERENCES Song(Track_no)
---);
 
 CREATE TABLE SungBy (
     Album_ID int,
     Artist_ID int,
     Track_no int,
-    Recording_date DATE,
-    CONSTRAINT PK_SungBy PRIMARY KEY (Album_ID, Artist_ID, Track_no),
-    CONSTRAINT FK_Album_ID_SungBy FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID),
-    CONSTRAINT FK_Artist_ID FOREIGN KEY (Artist_ID) REFERENCES Artist(Artist_ID),
-    CONSTRAINT FK_Track_no FOREIGN KEY (Album_ID, Track_no) REFERENCES Song(Album_ID, Track_no)
+    Recording_date DATE
 );
 
-REM ---------CREATED BASIC SKELETON TABLES WITH PRIMARY KEYS---------------
+-- Add primary key constraints
+ALTER TABLE Musician
+ADD CONSTRAINT PK_Musician PRIMARY KEY (Musician_ID);
+
+ALTER TABLE Studio
+ADD CONSTRAINT PK_Studio PRIMARY KEY (Studio_name);
+
+ALTER TABLE Album
+ADD CONSTRAINT PK_Album PRIMARY KEY (Album_ID);
+
+ALTER TABLE Song
+ADD CONSTRAINT PK_Song PRIMARY KEY (Album_ID, Track_no);
+
+ALTER TABLE Artist
+ADD CONSTRAINT PK_Artist PRIMARY KEY (Artist_ID);
+
+ALTER TABLE SungBy
+ADD CONSTRAINT PK_SungBy PRIMARY KEY (Album_ID, Artist_ID, Track_no);
+
+-- Add foreign key constraints
+ALTER TABLE Album
+ADD CONSTRAINT FK_Musicians FOREIGN KEY (Musicians) REFERENCES Musician(Musician_ID);
+
+ALTER TABLE Album
+ADD CONSTRAINT FK_Studio FOREIGN KEY (Studio_recorded) REFERENCES Studio(Studio_name);
+
+ALTER TABLE Song
+ADD CONSTRAINT FK_Album_ID_Song FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID);
+
+ALTER TABLE Artist
+ADD CONSTRAINT FK_Album_ID FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID);
+
+ALTER TABLE SungBy
+ADD CONSTRAINT FK_Album_ID_SungBy FOREIGN KEY (Album_ID) REFERENCES Album(Album_ID);
+
+ALTER TABLE SungBy
+ADD CONSTRAINT FK_Artist_ID FOREIGN KEY (Artist_ID) REFERENCES Artist(Artist_ID);
+
+ALTER TABLE SungBy
+ADD CONSTRAINT FK_Track_no FOREIGN KEY (Album_ID, Track_no) REFERENCES Song(Album_ID, Track_no);
+
 
 REM -----------------------------CREATING CONSTRAINTS--------------------------------------------
 
@@ -250,3 +267,158 @@ ALTER TABLE SungBy
 ADD CONSTRAINT FK_Track_no FOREIGN KEY (Track_no, Album_ID) REFERENCES Song(Track_no, Album_ID) ON DELETE CASCADE;
 
 REM ---------------------------------------SCRIPT FILE END--------------------------------------------------
+
+
+SET ECHO ON
+
+REM: HARISHRAJ S
+REM: 25/09/2023
+
+REM ------------------INSERT INTO VALUES----------------
+
+-- Inserting data into the Musician table
+INSERT INTO Musician (Musician_ID, Name, Birthplace)
+VALUES (1, 'John Doe', 'New York'); -- Inserting a musician
+
+-- Inserting data into the Studio table
+INSERT INTO Studio (Studio_name, Address, Phone)
+VALUES ('Music Studio A', '123 Main St', 1234567890); -- Inserting a studio
+
+-- Inserting data into the Album table
+INSERT INTO Album (Album_name, Album_ID, Year_of_release, No_of_tracks, Studio_recorded, Album_genre, Musicians)
+VALUES ('Greatest Hits', 1, 2000, 12, 'Music Studio A', 'POP', 1); -- Inserting an album
+
+-- Inserting data into the Song table
+INSERT INTO Song (Album_ID, Track_no, Song_name, Song_length, Song_genre)
+VALUES (1, 1, 'Track 1', 240, 'POP'); -- Inserting a song
+
+-- Inserting data into the Artist table
+INSERT INTO Artist (Artist_ID, Artist_name, Album_ID, Gender)
+VALUES (1, 'Singer A', 1, 'F'); -- Inserting an artist
+
+-- Inserting data into the SungBy table
+INSERT INTO SungBy (Album_ID, Artist_ID, Track_no, Recording_date)
+VALUES (1, 1, 1, TO_DATE('2023-09-29', 'YYYY-MM-DD')); -- Linking an artist to a song
+
+-- More data can be inserted in a similar way for testing.
+
+-- Inserting more data into the Musician table
+INSERT INTO Musician (Musician_ID, Name, Birthplace)
+VALUES (2, 'Jane Smith', 'Los Angeles'); -- Another musician
+
+-- Inserting more data into the Studio table
+INSERT INTO Studio (Studio_name, Address, Phone)
+VALUES ('Sound Waves Studio', '456 Elm St', 9876543210); -- Another studio
+
+-- Inserting more data into the Album table
+INSERT INTO Album (Album_name, Album_ID, Year_of_release, No_of_tracks, Studio_recorded, Album_genre, Musicians)
+VALUES ('Rock Anthems', 2, 1995, 10, 'Sound Waves Studio', 'POP', 2); -- Another album
+
+-- Inserting more data into the Song table
+INSERT INTO Song (Album_ID, Track_no, Song_name, Song_length, Song_genre)
+VALUES (2, 1, 'Rock Song 1', 320, 'POP'); -- Another song
+
+-- Inserting more data into the Artist table
+INSERT INTO Artist (Artist_ID, Artist_name, Album_ID, Gender)
+VALUES (2, 'Singer B', 2, 'M'); -- Another artist
+
+-- Inserting more data into the SungBy table
+INSERT INTO SungBy (Album_ID, Artist_ID, Track_no, Recording_date)
+VALUES (2, 2, 1, TO_DATE('2023-09-30', 'YYYY-MM-DD')); -- Linking another artist to a song
+
+-- You can continue to add more data using similar INSERT INTO statements as needed.
+
+-- Attempting to insert data into the SungBy table with a non-existing Artist_ID (violating FK_Artist_ID)
+-- This should result in a foreign key constraint error.
+INSERT INTO SungBy (Album_ID, Artist_ID, Track_no, Recording_date)
+VALUES (1, 3, 1, TO_DATE('2023-09-30', 'YYYY-MM-DD'));
+
+-- Attempting to insert data into the SungBy table with a non-existing Album_ID (violating FK_Album_ID_SungBy)
+-- This should result in a foreign key constraint error.
+INSERT INTO SungBy (Album_ID, Artist_ID, Track_no, Recording_date)
+VALUES (3, 1, 1, TO_DATE('2023-09-30', 'YYYY-MM-DD'));
+
+-- Attempting to insert data into the SungBy table with a non-existing Track_no (violating FK_Track_no)
+-- This should result in a foreign key constraint error.
+INSERT INTO SungBy (Album_ID, Artist_ID, Track_no, Recording_date)
+VALUES (1, 1, 10, TO_DATE('2023-09-30', 'YYYY-MM-DD'));
+
+-- Attempting to insert a song with a genre 'INVALID' (violating Check_Song_genre constraint)
+-- This should result in a check constraint error.
+INSERT INTO Song (Album_ID, Track_no, Song_name, Song_length, Song_genre)
+VALUES (1, 2, 'Invalid Song', 180, 'INVALID');
+
+-- Attempting to insert an album with less than 7 tracks (violating Check_PAT_song_len constraint)
+-- This should result in a check constraint error.
+INSERT INTO Album (Album_name, Album_ID, Year_of_release, No_of_tracks, Studio_recorded, Album_genre, Musicians)
+VALUES ('Short Album', 3, 2020, 5, 'Music Studio A', 'POP', 1);
+
+-- Attempting to insert an album with a release year earlier than 1945 (violating Check_year_of_release constraint)
+-- This should result in a check constraint error.
+INSERT INTO Album (Album_name, Album_ID, Year_of_release, No_of_tracks, Studio_recorded, Album_genre, Musicians)
+VALUES ('Old Album', 4, 1930, 12, 'Sound Waves Studio', 'POP', 2);
+
+-- Attempting to insert an artist with an invalid gender 'X' (violating Check_Gender constraint)
+-- This should result in a check constraint error.
+INSERT INTO Artist (Artist_ID, Artist_name, Album_ID, Gender)
+VALUES (3, 'Singer C', 3, 'X');
+
+
+REM -----------------------------------FORMAT COLUMN--------------------------------------------------------------
+
+REM --------------------- Musician Table -------------------------
+
+COLUMN Musician_ID FORMAT A20
+COLUMN Name FORMAT A20
+COLUMN Birthplace FORMAT A20
+
+REM --------------------- Studio Table --------------------------
+
+COLUMN Studio_name FORMAT A20
+COLUMN Address FORMAT A20
+COLUMN Phone FORMAT A20
+
+REM ------------------------Album Table ------------------------------
+
+COLUMN Album_name FORMAT A20
+COLUMN Album_ID FORMAT A20
+COLUMN Year_of_release FORMAT A20
+COLUMN No_of_tracks FORMAT A20
+COLUMN Studio_recorded FORMAT A20
+COLUMN Album_genre FORMAT A20
+COLUMN Musicians FORMAT A20
+
+REM ----------------------- Song Table -----------------------------
+
+COLUMN Album_ID FORMAT A20
+COLUMN Track_no FORMAT A20
+COLUMN Song_name FORMAT A20
+COLUMN Song_length FORMAT A20
+COLUMN Song_genre FORMAT A20
+
+REM ------------------------- Artist Table ---------------------------
+
+COLUMN Artist_ID FORMAT A20
+COLUMN Artist_name FORMAT A20
+COLUMN Album_ID FORMAT A20
+COLUMN Gender FORMAT A20
+
+REM ------------------------------ SungBy Table ---------------------------
+
+COLUMN Album_ID FORMAT A20
+COLUMN Artist_ID FORMAT A20
+COLUMN Track_no FORMAT A20
+COLUMN Recording_date FORMAT A20
+
+REM -----------------------------------------SELECT QUERIES --------------------------------------------------
+
+SELECT * FROM Musician;
+SELECT * FROM Studio;
+SELECT * FROM Album;
+SELECT * FROM Song;
+SELECT * FROM Artist;
+SELECT * FROM SungBy;
+
+REM --------------------------------------- END OF SCRIPT FILE ----------------------------------------------
+
+

@@ -1,5 +1,6 @@
 SET ECHO ON;
 
+REM| EMPLOYEES.sql DML COMMANDS
 REM| Question 2
 
 REM| Author : Harishraj S
@@ -93,5 +94,21 @@ FROM employees;
 
 REM| 18. Show the number of employees hired by year-wise. Sort the result by year-wise
 -- USAGE OF Group by
+SELECT COUNT(employee_id) as "No.of Employees", hire_date
+FROM employees
+GROUP BY hire_date
+ORDER BY hire_date;
 
 
+REM| 19. Display the minimum, maximum and average salary, number of employees for
+REM| each department. Exclude the employee(s) who are not in any department.
+REM| Include the department(s) with at least 2 employees and the average salary is
+REM| more than 10000. Sort the result by minimum salary in descending order.
+
+SELECT MIN(salary), MAX(salary), AVG(salary), COUNT(employee_id), department_id
+FROM employees
+GROUP BY department_id
+HAVING COUNT(employee_id) >= 2 AND AVG(salary) > 10000
+ORDER BY MIN(salary) DESC;
+
+REM| ------------------------------END OF SCRIPT FILE--------------------------------------------------------------------------

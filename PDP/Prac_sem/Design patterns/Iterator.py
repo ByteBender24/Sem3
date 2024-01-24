@@ -34,6 +34,7 @@ likewise using list function we can reverse
 '''
 
 
+from typing import Iterable, Iterator
 class MyIterator:
     def __init__(self, n):
         self.n = n
@@ -109,6 +110,8 @@ def factors(n):
 
 print(factors(20))
 
+# -------------------------------------------------------------------------------------------------
+print("\n\n")
 
 #generator
 def factors(n):
@@ -135,3 +138,127 @@ OUTPUT:
 5
 10
 '''
+# -------------------------------------------------------------------------------------------------
+print("\n\n")
+
+
+class student:
+
+    def __init__(self, name, mark, club):
+        self.name = name
+        self.mark = mark
+        self.club = club
+
+    def __str__(self):
+        # result=''
+        result = self.name+'\n'+str(self.mark)+'\n'+self.club
+        return result
+
+
+class iterable_student(Iterable):
+
+    def __init__(self, *args):
+        self.student_list = [*args]
+
+    def append(self, obj):
+        self.student_list.append(obj)
+
+    def __iter__(self):
+        return iterator_student(self.student_list)
+
+
+class iterator_student(Iterator[str]):
+
+    def __init__(self, iterable_list):
+        self.iterator_list = [x for x in iterable_list if x.club == 'nss']
+        self.index = 0
+
+    def __next__(self):
+        if self.index < len(self.iterator_list):
+            x = self.iterator_list[self.index]
+            self.index += 1
+            return x
+        else:
+            raise StopIteration
+
+
+a = student('xyz1', 10, 'nss')
+b = student('xyz2', 20, 'nso')
+c = student('xyz3', 30, 'yrc')
+d = student('xyz4', 40, 'nss')
+e = student('xyz5', 50, 'nso')
+# f=student('xyz6',60,'yrc')
+# g=student('xyz7',70,'nss')
+# h=student('xyz8',80,'nso')
+# i=student('xyz9',90,'yrc')
+# j=student('xyz10',100,'nss')
+
+iterable_student_list = iterable_student(a, b, c, d)
+iterable_student_list.append(e)
+# iterable_student_list.append(f)
+# iterable_student_list.append(g)
+# iterable_student_list.append(h)
+# iterable_student_list.append(i)
+# iterable_student_list.append(j)
+
+
+for i in iterable_student_list:
+    print(i)
+
+
+# -------------------------------------------------------------------------------------------------
+print("\n\n")
+
+
+# Define an iterable interface
+class Iterable:
+    def create_iterator(self):
+        pass
+
+# Define an iterator interface
+
+
+class Iterator:
+    def has_next(self):
+        pass
+
+    def next(self):
+        pass
+
+# Concrete implementation of an iterable
+
+
+class ConcreteIterable(Iterable):
+    def __init__(self):
+        self._data = [1, 2, 3, 4, 5]
+
+    def create_iterator(self):
+        return ConcreteIterator(self)
+
+# Concrete implementation of an iterator
+
+
+class ConcreteIterator(Iterator):
+    def __init__(self, iterable):
+        self._iterable = iterable
+        self._index = 0
+
+    def has_next(self):
+        return self._index < len(self._iterable._data)
+
+    def next(self):
+        if self.has_next():
+            value = self._iterable._data[self._index]
+            self._index += 1
+            return value
+        else:
+            raise StopIteration("No more elements")
+
+
+# Client code
+iterable = ConcreteIterable()
+iterator = iterable.create_iterator()
+
+while iterator.has_next():
+    value = iterator.next()
+    print(value)

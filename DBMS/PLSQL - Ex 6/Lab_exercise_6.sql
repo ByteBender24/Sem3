@@ -5,7 +5,6 @@ SET NULL 'Null';
 -- Write a stored procedure to display the total number of pizza's ordered by
 -- the given order number. (Use IN, OUT)
 
-
 CREATE OR REPLACE PROCEDURE total_pizzas 
 ( order_num IN order_list.order_no%TYPE , total_num OUT NUMBER)
 IS
